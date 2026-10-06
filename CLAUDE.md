@@ -13,7 +13,7 @@
 ## ディレクトリ
 | パス | 内容 | git管理 |
 |---|---|---|
-| `crazyflie-firmware/` | 解析対象（upstream clone、submodule 取得済み） | 対象外 |
+| `crazyflie-firmware/` | 解析対象（upstream clone、submodule 取得済み） | submodule（`9cf9d86c` に固定） |
 | `tools/` | 解析用スクリプト | ○ |
 | `analysis/config/<platform>/` | Kconfig 解決結果（`.config`, `autoconf.h`）、ビルド対象ファイル一覧（`filelist.txt`）、非対象（`excluded.txt`） | ○ |
 | `analysis/ctags/<platform>/` | `tags` / `tags.json`（シンボル索引） | 対象外（再生成可） |
