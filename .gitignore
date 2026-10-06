@@ -1,0 +1,9 @@
+# analysis target (separate upstream repo)
+/crazyflie-firmware/
+
+# regenerable analysis output
+/analysis/doxygen/
+/analysis/ctags/
+/analysis/mermaid/
+
+__pycache__/

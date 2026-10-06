@@ -1,0 +1,134 @@
+// データフロー（層の配置を保った版、座標は POS_DATAFLOW）
+// 生成元: tools/gen_layer_diagrams.py（このファイルは直接編集しない）
+digraph dataflow_layered {
+  graph [splines=true, sep="+2", esep="+1", outputorder=edgesfirst, fontname="Yu Gothic UI", pad=0.3];
+  node [shape=box, style="rounded,filled", fontname="Yu Gothic UI", fontsize=10, height=0.45, width=1.3, fixedsize=false];
+  edge [fontname="Yu Gothic UI", fontsize=8, arrowsize=0.6, color="#2f6fb3", fontcolor="#3b5f8a", penwidth=1.3];
+  LLC [label="低レベル commander", pos="2.4,9.7!", fillcolor=white, color="#d49ac0", penwidth=1.4];
+  HLC [label="high-level commander
++ planner", pos="4.8,9.7!", fillcolor=white, color="#d49ac0", penwidth=1.4];
+  CMD [label="commander
+(優先度管理)", pos="7.4,9.7!", fillcolor=white, color="#d49ac0", penwidth=1.4];
+  CA [label="衝突回避", pos="7.4,8.5!", fillcolor=white, color="#d49ac0", penwidth=1.4];
+  SUP [label="supervisor", pos="9.6,8.5!", fillcolor=white, color="#d49ac0", penwidth=1.4];
+  CTRL [label="制御", pos="11.8,8.5!", fillcolor=white, color="#d49ac0", penwidth=1.4];
+  PD [label="出力分配", pos="13.8,8.5!", fillcolor=white, color="#d49ac0", penwidth=1.4];
+  EST [label="状態推定", pos="3.6,7.4!", fillcolor=white, color="#d49ac0", penwidth=1.4];
+  LOC [label="測位
+lighthouse / localization", pos="6.0,7.0!", fillcolor=white, color="#d49ac0", penwidth=1.4];
+  DMGR [label="デッキ管理
+検出・照合", pos="0.6,5.7!", fillcolor=white, color="#8cc7ae", penwidth=1.4];
+  DDRV [label="デッキドライバ
+Flow / Loco / LH ...", pos="8.0,5.7!", fillcolor=white, color="#8cc7ae", penwidth=1.4];
+  DAPI [label="デッキ API
+GPIO / SPI / ADC", pos="9.8,5.7!", fillcolor=white, color="#8cc7ae", penwidth=1.4];
+  CRTP [label="CRTP ルータ
++ console", pos="2.0,4.3!", fillcolor=white, color="#e0b27a", penwidth=1.4];
+  PL [label="param / log", pos="3.9,4.3!", fillcolor=white, color="#e0b27a", penwidth=1.4];
+  MEM [label="mem", pos="5.6,4.3!", fillcolor=white, color="#e0b27a", penwidth=1.4];
+  PEER [label="周辺機体の位置テーブル
+peer localization", pos="7.4,4.3!", fillcolor=white, color="#e0b27a", penwidth=1.4];
+  SLK [label="syslink", pos="0.6,2.8!", fillcolor=white, color="#86bfd6", penwidth=1.4];
+  LINK [label="CRTP リンク
+radiolink / usblink", pos="2.2,2.8!", fillcolor=white, color="#86bfd6", penwidth=1.4];
+  STO [label="ストレージ", pos="3.9,2.8!", fillcolor=white, color="#86bfd6", penwidth=1.4];
+  SENS [label="センサ統合", pos="6.6,2.8!", fillcolor=white, color="#86bfd6", penwidth=1.4];
+  PM [label="電源管理", pos="11.4,2.8!", fillcolor=white, color="#86bfd6", penwidth=1.4];
+  DEV_EEP [label="EEPROM ドライバ
+eeprom / configblock", pos="3.9,1.3!", fillcolor=white, color="#99c98a", penwidth=1.4];
+  DEV_IMU [label="IMU ドライバ
+bmi088 / bmp3", pos="6.6,1.3!", fillcolor=white, color="#99c98a", penwidth=1.4];
+  DEV_MOT [label="モータドライバ
+motors", pos="13.8,1.3!", fillcolor=white, color="#99c98a", penwidth=1.4];
+  UART [label="uart_syslink
+(USART6)", pos="0.6,-0.2!", fillcolor=white, color="#86b877", penwidth=1.4];
+  I2C1DRV [label="I2C1 ドライバ
+i2cdev / i2c_drv", pos="3.9,-0.2!", fillcolor=white, color="#86b877", penwidth=1.4];
+  I2C3DRV [label="I2C3 ドライバ
+i2cdev / i2c_drv", pos="6.6,-0.2!", fillcolor=white, color="#86b877", penwidth=1.4];
+  EXTI [label="exti
+割り込みの振り分け", pos="8.4,-0.2!", fillcolor=white, color="#86b877", penwidth=1.4];
+  P_USART6 [label="USART6 + DMA", pos="0.6,-2.9!", fillcolor=white, color="#9a9a9a", penwidth=1.4];
+  P_USB [label="USB OTG FS", pos="2.2,-2.9!", fillcolor=white, color="#9a9a9a", penwidth=1.4];
+  P_I2C1 [label="I2C1 + DMA", pos="3.9,-2.9!", fillcolor=white, color="#9a9a9a", penwidth=1.4];
+  P_I2C3 [label="I2C3 + DMA", pos="6.6,-2.9!", fillcolor=white, color="#9a9a9a", penwidth=1.4];
+  P_EXTI [label="EXTI", pos="8.4,-2.9!", fillcolor=white, color="#9a9a9a", penwidth=1.4];
+  P_SPI1 [label="SPI1 + DMA", pos="9.8,-2.9!", fillcolor=white, color="#9a9a9a", penwidth=1.4];
+  P_TIM [label="TIM2 / TIM4
+PWM", pos="13.8,-2.9!", fillcolor=white, color="#9a9a9a", penwidth=1.4];
+  X_NRF [label="nRF51", pos="0.6,-4.1!", fillcolor=white, color="#9a9a9a", penwidth=1.4];
+  X_EEP [label="EEPROM チップ
+24AA64F", pos="3.9,-4.1!", fillcolor=white, color="#9a9a9a", penwidth=1.4];
+  X_IMU [label="BMI088 / BMP388", pos="7.5,-4.1!", fillcolor=white, color="#9a9a9a", penwidth=1.4];
+  X_DECK [label="デッキ", pos="9.8,-4.1!", fillcolor=white, color="#9a9a9a", penwidth=1.4];
+  X_MOT [label="ブラシモータ ×4", pos="13.8,-4.1!", fillcolor=white, color="#9a9a9a", penwidth=1.4];
+  X_IMU -> P_I2C3 [label="I2C 信号", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  P_I2C3 -> I2C3DRV [label="DMA 転送", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  I2C3DRV -> DEV_IMU [label="レジスタ値", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  DEV_IMU -> SENS [label="生データ", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  X_IMU -> P_EXTI [label="data ready (INT)", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  P_EXTI -> EXTI [label="割り込み", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  EXTI -> SENS [label="IMU 割り込み", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  SENS -> EST [label="gyro / acc / baro", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  SENS -> SUP [label="acc", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  SENS -> CTRL [label="gyro", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  DDRV -> EST [label="flow / 距離 / TDoA", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  LOC -> EST [label="位置 / 姿勢 / sweep", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  EST -> CMD [label="state", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  EST -> HLC [label="state", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  EST -> CA [label="state", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  EST -> CTRL [label="state", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  SUP -> EST [label="飛行中フラグ", color="#c03a3a", fontcolor="#c03a3a", penwidth=2.0];
+  CRTP -> LLC [label="port 3 / 7", color="#d9822b", fontcolor="#d9822b", penwidth=2.0];
+  CRTP -> HLC [label="port 8", color="#d9822b", fontcolor="#d9822b", penwidth=2.0];
+  LLC -> CMD [label="setpoint", color="#d9822b", fontcolor="#d9822b", penwidth=2.0];
+  HLC -> CMD [label="setpoint", color="#d9822b", fontcolor="#d9822b", penwidth=2.0];
+  CMD -> SUP [label="setpoint (監視)", color="#d9822b", fontcolor="#d9822b", penwidth=2.0];
+  CMD -> CA [label="setpoint", color="#d9822b", fontcolor="#d9822b", penwidth=2.0];
+  CA -> SUP [label="修正 setpoint", color="#d9822b", fontcolor="#d9822b", penwidth=2.0];
+  SUP -> CTRL [label="最終 setpoint", color="#d9822b", fontcolor="#d9822b", penwidth=2.0];
+  SUP -> LLC [label="受付停止", color="#c03a3a", fontcolor="#c03a3a", penwidth=2.0];
+  CRTP -> LOC [label="port 6", color="#8a8a8a", fontcolor="#8a8a8a", penwidth=1.3];
+  LOC -> PEER [label="他の機体の位置", color="#8a8a8a", fontcolor="#8a8a8a", penwidth=1.3];
+  PEER -> CA [label="他の機体の位置", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  CTRL -> PD [label="control", color="#3f9a4a", fontcolor="#3f9a4a", penwidth=2.0];
+  PM -> PD [label="電池電圧", color="#3f9a4a", fontcolor="#3f9a4a", penwidth=2.0];
+  PD -> DEV_MOT [label="PWM 比率", color="#3f9a4a", fontcolor="#3f9a4a", penwidth=2.0];
+  SUP -> DEV_MOT [label="停止", color="#c03a3a", fontcolor="#c03a3a", penwidth=2.0];
+  DEV_MOT -> P_TIM [label="比較レジスタ", color="#3f9a4a", fontcolor="#3f9a4a", penwidth=2.0];
+  P_TIM -> X_MOT [label="PWM 信号", color="#3f9a4a", fontcolor="#3f9a4a", penwidth=2.0];
+  X_DECK -> P_SPI1 [label="SPI 信号", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  P_SPI1 -> DAPI [label="DMA 転送", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  DAPI -> DDRV [label="デッキのデータ", color="#2f6fb3", fontcolor="#2f6fb3", penwidth=1.3];
+  X_NRF -> P_USART6 [label="UART 信号", color="#8a8a8a", fontcolor="#8a8a8a", penwidth=1.3];
+  P_USART6 -> UART [label="受信割り込み", color="#8a8a8a", fontcolor="#8a8a8a", penwidth=1.3];
+  UART -> SLK [label="syslink", color="#8a8a8a", fontcolor="#8a8a8a", penwidth=1.3];
+  P_USB -> LINK [label="CRTP (USB)", color="#8a8a8a", fontcolor="#8a8a8a", penwidth=1.3];
+  SLK -> LINK [label="CRTP", color="#8a8a8a", fontcolor="#8a8a8a", penwidth=1.3];
+  SLK -> PM [label="電池の状態", color="#8a8a8a", fontcolor="#8a8a8a", penwidth=1.3];
+  SLK -> DMGR [label="1-Wire", color="#8a8a8a", fontcolor="#8a8a8a", penwidth=1.3];
+  LINK -> CRTP [label="CRTP", color="#8a8a8a", fontcolor="#8a8a8a", penwidth=1.3];
+  CRTP -> PL [label="port 2 / 5", color="#8a8a8a", fontcolor="#8a8a8a", penwidth=1.3];
+  CRTP -> MEM [label="port 4", color="#8a8a8a", fontcolor="#8a8a8a", penwidth=1.3];
+  X_EEP -> P_I2C1 [label="I2C 信号", color="#8a8a8a", fontcolor="#8a8a8a", penwidth=1.3];
+  P_I2C1 -> I2C1DRV [label="DMA 転送", color="#8a8a8a", fontcolor="#8a8a8a", penwidth=1.3];
+  I2C1DRV -> DEV_EEP [label="バイト列", color="#8a8a8a", fontcolor="#8a8a8a", penwidth=1.3];
+  DEV_EEP -> STO [label="保存値", color="#8a8a8a", fontcolor="#8a8a8a", penwidth=1.3];
+  STO -> PL [label="永続 param", color="#8a8a8a", fontcolor="#8a8a8a", penwidth=1.3];
+  l0note [shape=plaintext, style="", fontsize=8, fontcolor="#6b64a8", width=4.4, label="L0 のベンダライブラリ（StdPeriph）はペリフェラルの設定・起動だけ\nを行う。データは DMA がペリフェラルからメモリへ直接転送するので、この図の矢印は L0 を素通りする", pos="11.4,-1.5!"];
+  leg_a0 [shape=point, width=0.01, pos="0.4,-5.25!", color=white];
+  leg_b0 [shape=plaintext, label="計測値・推定状態", fontsize=9, fontcolor="#2f6fb3", style="", width=1.6, pos="1.85,-5.25!"];
+  leg_a0 -> leg_b0 [color="#2f6fb3", penwidth=2, arrowsize=0.5];
+  leg_a1 [shape=point, width=0.01, pos="3.3,-5.25!", color=white];
+  leg_b1 [shape=plaintext, label="目標値（setpoint）", fontsize=9, fontcolor="#d9822b", style="", width=1.6, pos="4.75,-5.25!"];
+  leg_a1 -> leg_b1 [color="#d9822b", penwidth=2, arrowsize=0.5];
+  leg_a2 [shape=point, width=0.01, pos="6.2,-5.25!", color=white];
+  leg_b2 [shape=plaintext, label="出力（制御 → モータ）", fontsize=9, fontcolor="#3f9a4a", style="", width=1.6, pos="7.65,-5.25!"];
+  leg_a2 -> leg_b2 [color="#3f9a4a", penwidth=2, arrowsize=0.5];
+  leg_a3 [shape=point, width=0.01, pos="9.1,-5.25!", color=white];
+  leg_b3 [shape=plaintext, label="安全（停止・受付停止）", fontsize=9, fontcolor="#c03a3a", style="", width=1.6, pos="10.549999999999999,-5.25!"];
+  leg_a3 -> leg_b3 [color="#c03a3a", penwidth=2, arrowsize=0.5];
+  leg_a4 [shape=point, width=0.01, pos="12.0,-5.25!", color=white];
+  leg_b4 [shape=plaintext, label="通信・記憶・サービス", fontsize=9, fontcolor="#8a8a8a", style="", width=1.6, pos="13.45,-5.25!"];
+  leg_a4 -> leg_b4 [color="#8a8a8a", penwidth=2, arrowsize=0.5];
+}

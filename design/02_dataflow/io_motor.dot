@@ -1,0 +1,87 @@
+// モータに届く経路（生成元: tools/io_paths.py）
+digraph motor {
+  graph [rankdir=LR, nodesep=0.3, ranksep=0.6, fontname="Yu Gothic UI", splines=spline];
+  node [shape=box, style="rounded,filled", fontname="Yu Gothic UI", fontsize=10, height=0.4];
+  edge [fontname="Yu Gothic UI", fontsize=8, arrowsize=0.6, color="#7a9cc6", fontcolor="#557"];
+  { rank=source; S_IMU S_DECK S_EEP S_NRF S_USB S_TIME; }
+  CMD [label="L5: commander
+(優先度管理)", fillcolor="#fdeef7"];
+  CRTP_RX [label="L3: CRTP ルータ（受信）", fillcolor="#fff4e6"];
+  CTRL [label="L5: 制御", fillcolor="#fdeef7"];
+  DDRV [label="L4: デッキドライバ
+Flow / Loco / LH ...", fillcolor="#eaf7f2"];
+  DEV_EEP [label="L1D: EEPROM ドライバ
+eeprom / configblock", fillcolor="#edf7e9"];
+  DEV_IMU [label="L1D: IMU ドライバ
+bmi088 / bmp3", fillcolor="#edf7e9"];
+  DEV_MOT [label="L1D: モータドライバ
+motors", fillcolor="#edf7e9"];
+  EST [label="L5: 状態推定", fillcolor="#fdeef7"];
+  I2C1DRV [label="L1B: I2C1 ドライバ
+i2cdev / i2c_drv", fillcolor="#e3f1dc"];
+  I2C3DRV [label="L1B: I2C3 ドライバ
+i2cdev / i2c_drv", fillcolor="#e3f1dc"];
+  K_MOT [label="モータ", fillcolor="#e6f4d7", penwidth=2];
+  LINK_RX [label="L2: CRTP リンク（受信）", fillcolor="#e9f6fb"];
+  PARAM [label="L3: param（実行時の書き込み）", fillcolor="#fff4e6"];
+  PBOOT [label="L3: param（起動時の永続値の復元）", fillcolor="#fff4e6"];
+  PD [label="L5: 出力分配", fillcolor="#fdeef7"];
+  PM [label="L2: 電源管理", fillcolor="#e9f6fb"];
+  P_I2C1 [label="HW: I2C1 + DMA", fillcolor="#f2f2f2"];
+  P_I2C3 [label="HW: I2C3 + DMA", fillcolor="#f2f2f2"];
+  P_TIM [label="HW: TIM2 / TIM4
+PWM", fillcolor="#f2f2f2"];
+  P_USART6 [label="HW: USART6 + DMA", fillcolor="#f2f2f2"];
+  SENS [label="L2: センサ統合", fillcolor="#e9f6fb"];
+  SLK_RX [label="L2: syslink（受信）", fillcolor="#e9f6fb"];
+  STO [label="L2: ストレージ", fillcolor="#e9f6fb"];
+  SUP [label="L5: supervisor", fillcolor="#fdeef7"];
+  S_DECK [label="デッキのセンサ\n［センサ］", fillcolor="#fff7cc"];
+  S_EEP [label="EEPROM（読み出し）\n［記憶］", fillcolor="#fff7cc"];
+  S_IMU [label="IMU・気圧計
+BMI088 / BMP388\n［センサ］", fillcolor="#fff7cc"];
+  S_NRF [label="nRF51 からの受信
+無線・電池・ボタン・1-Wire\n［通信］", fillcolor="#fff7cc"];
+  S_TIME [label="時間
+(tick・タイマ)\n［時間］", fillcolor="#fff7cc"];
+  S_USB [label="USB からの受信\n［通信］", fillcolor="#fff7cc"];
+  UART [label="L1B: uart_syslink
+(USART6)", fillcolor="#e3f1dc"];
+  CMD -> SUP [label="setpoint (監視)"];
+  CRTP_RX -> PARAM [label="port 2", color="#c05050", fontcolor="#c05050", penwidth=2.2];
+  CTRL -> PD [label="control"];
+  DDRV -> EST [label="flow / 距離 / TDoA"];
+  DEV_EEP -> SENS [label="較正角 (configblock)"];
+  DEV_EEP -> STO [label="保存値"];
+  DEV_IMU -> SENS [label="生データ"];
+  DEV_MOT -> P_TIM [label="比較レジスタ"];
+  EST -> CMD [label="state"];
+  EST -> CTRL [label="state"];
+  I2C1DRV -> DEV_EEP [label="バイト列"];
+  I2C3DRV -> DEV_IMU [label="レジスタ値"];
+  LINK_RX -> CRTP_RX [label="CRTP", color="#c05050", fontcolor="#c05050", penwidth=2.2];
+  PARAM -> DEV_MOT [label="motorPowerSet", color="#c05050", fontcolor="#c05050", penwidth=2.2];
+  PARAM -> PD [label="idleThrust"];
+  PARAM -> SUP [label="stabilizer.stop など"];
+  PBOOT -> PD [label="idleThrust (永続)"];
+  PD -> DEV_MOT [label="PWM 比率", color="#2f6fb3", penwidth=2, label="PWM 比率\n(supervisor が許可したときだけ)"];
+  PM -> PD [label="電池電圧"];
+  P_I2C1 -> I2C1DRV [label="DMA 転送"];
+  P_I2C3 -> I2C3DRV [label="DMA 転送"];
+  P_TIM -> K_MOT [label="PWM 信号"];
+  P_USART6 -> UART [label="受信割り込み", color="#c05050", fontcolor="#c05050", penwidth=2.2];
+  SENS -> CTRL [label="gyro"];
+  SENS -> SUP [label="acc"];
+  SLK_RX -> LINK_RX [label="CRTP", color="#c05050", fontcolor="#c05050", penwidth=2.2];
+  SLK_RX -> PM [label="電池の状態"];
+  STO -> PBOOT [label="永続 param"];
+  SUP -> DEV_MOT [label="停止", color="#2f6fb3", style=dashed, penwidth=1.6];
+  S_DECK -> DDRV [label="I2C (ToF など)"];
+  S_EEP -> P_I2C1 [label="I2C 信号"];
+  S_IMU -> P_I2C3 [label="I2C 信号"];
+  S_NRF -> P_USART6 [label="UART 信号", color="#c05050", fontcolor="#c05050", penwidth=2.2];
+  S_TIME -> PM [label="無操作時間"];
+  S_TIME -> SUP [label="経過時間 (タイムアウト)"];
+  S_USB -> LINK_RX [label="CRTP (USB)", color="#c05050", fontcolor="#c05050", penwidth=2.2];
+  UART -> SLK_RX [label="syslink", color="#c05050", fontcolor="#c05050", penwidth=2.2];
+}

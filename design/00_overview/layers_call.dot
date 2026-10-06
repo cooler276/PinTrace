@@ -1,0 +1,178 @@
+// 呼び出し・依存
+// 生成元: tools/gen_layer_diagrams.py（このファイルは直接編集しない）
+digraph layers {
+  graph [rankdir=TB, newrank=true, compound=true, nodesep=0.25, ranksep=0.6, fontname="Yu Gothic UI", fontsize=12, labeljust=l, splines=spline];
+  node [shape=box, style="rounded,filled", fillcolor=white, fontname="Yu Gothic UI", fontsize=10, height=0.4];
+  edge [fontname="Yu Gothic UI", fontsize=8, arrowsize=0.6];
+  subgraph cluster_L5 {
+    label="L5 アプリケーション層"; style="rounded,filled"; fillcolor="#fdeef7"; color="#d49ac0";
+    APP [label="アプリ層
+(cf2 では無効)"];
+    HLC [label="high-level commander
++ planner"];
+    LLC [label="低レベル commander"];
+    LOC [label="測位
+lighthouse / localization"];
+    STAB [label="スタビライザ
+1 kHz ループ", fillcolor="#ffe3f1", penwidth=1.5];
+    { rank=same; APP HLC LLC LOC STAB; }
+    CMD [label="commander
+(優先度管理)"];
+    EST [label="状態推定"];
+    SUP [label="supervisor"];
+    CA [label="衝突回避"];
+    CTRL [label="制御"];
+    PD [label="出力分配"];
+    { rank=same; CMD EST SUP CA CTRL PD; }
+  }
+  subgraph cluster_L4 {
+    label="L4 デッキ層"; style="rounded,filled"; fillcolor="#eaf7f2"; color="#8cc7ae";
+    DMGR [label="デッキ管理
+検出・照合"];
+    DDRV [label="デッキドライバ
+Flow / Loco / LH ..."];
+    DAPI [label="デッキ API
+GPIO / SPI / ADC"];
+    { rank=same; DMGR DDRV DAPI; }
+  }
+  subgraph cluster_L3 {
+    label="L3 基盤サービス層"; style="rounded,filled"; fillcolor="#fff4e6"; color="#e0b27a";
+    SYS [label="system
+起動・自己テスト"];
+    CRTP [label="CRTP ルータ
++ console"];
+    PL [label="param / log"];
+    MEM [label="mem"];
+    PEER [label="周辺機体の位置テーブル
+peer localization"];
+    WRK [label="worker"];
+    UTL [label="共通部品
+utils"];
+    { rank=same; SYS CRTP PL MEM PEER WRK UTL; }
+  }
+  subgraph cluster_L2 {
+    label="L2 ハード抽象化層"; style="rounded,filled"; fillcolor="#e9f6fb"; color="#86bfd6";
+    SENS [label="センサ統合"];
+    LINK [label="CRTP リンク
+radiolink / usblink"];
+    SLK [label="syslink"];
+    PM [label="電源管理"];
+    STO [label="ストレージ"];
+    LEDS [label="LED / ブザー"];
+    { rank=same; SENS LINK SLK PM STO LEDS; }
+  }
+  subgraph cluster_L1D {
+    label="L1 ドライバ層（デバイスドライバ）"; style="rounded,filled"; fillcolor="#edf7e9"; color="#99c98a";
+    DEV_IMU [label="IMU ドライバ
+bmi088 / bmp3"];
+    DEV_EEP [label="EEPROM ドライバ
+eeprom / configblock"];
+    DEV_MOT [label="モータドライバ
+motors"];
+    { rank=same; DEV_IMU DEV_EEP DEV_MOT; }
+  }
+  subgraph cluster_L1B {
+    label="L1 ドライバ層（バスドライバ）"; style="rounded,filled"; fillcolor="#e3f1dc"; color="#86b877";
+    I2C3DRV [label="I2C3 ドライバ
+i2cdev / i2c_drv"];
+    I2C1DRV [label="I2C1 ドライバ
+i2cdev / i2c_drv"];
+    UART [label="uart_syslink
+(USART6)"];
+    EXTI [label="exti
+割り込みの振り分け"];
+    WDG [label="watchdog"];
+    { rank=same; I2C3DRV I2C1DRV UART EXTI WDG; }
+  }
+  subgraph cluster_L0 {
+    label="L0 プラットフォーム・OS 層"; style="rounded,filled"; fillcolor="#f1efff"; color="#aaa1dd";
+    PLAT [label="platform
+機種差分"];
+    RTOS [label="FreeRTOS"];
+    LIB [label="ベンダライブラリ
+StdPeriph / USB / CMSIS"];
+    { rank=same; PLAT RTOS LIB; }
+  }
+  subgraph cluster_HW {
+    label="HW ハードウェア"; style="rounded,filled"; fillcolor="#f2f2f2"; color="#9a9a9a";
+    P_USART6 [label="USART6 + DMA"];
+    P_USB [label="USB OTG FS"];
+    P_I2C1 [label="I2C1 + DMA"];
+    P_SPI1 [label="SPI1 + DMA"];
+    P_I2C3 [label="I2C3 + DMA"];
+    P_EXTI [label="EXTI"];
+    P_TIM [label="TIM2 / TIM4
+PWM"];
+    { rank=same; P_USART6 P_USB P_I2C1 P_SPI1 P_I2C3 P_EXTI P_TIM; }
+    X_NRF [label="nRF51"];
+    X_EEP [label="EEPROM チップ
+24AA64F"];
+    X_DECK [label="デッキ"];
+    X_IMU [label="BMI088 / BMP388"];
+    X_MOT [label="ブラシモータ ×4"];
+    { rank=same; X_NRF X_EEP X_DECK X_IMU X_MOT; }
+  }
+  APP -> HLC [color="#666666", fontcolor="#666666"];
+  HLC -> CMD [color="#666666", fontcolor="#666666"];
+  LLC -> CMD [color="#666666", fontcolor="#666666"];
+  STAB -> CMD [color="#666666", fontcolor="#666666"];
+  STAB -> HLC [color="#666666", fontcolor="#666666", label="GetSetpoint"];
+  STAB -> EST [color="#666666", fontcolor="#666666"];
+  STAB -> SUP [color="#666666", fontcolor="#666666"];
+  STAB -> CA [color="#666666", fontcolor="#666666"];
+  STAB -> CTRL [color="#666666", fontcolor="#666666"];
+  STAB -> PD [color="#666666", fontcolor="#666666"];
+  CA -> PEER [color="#666666", fontcolor="#666666"];
+  LOC -> PEER [color="#666666", fontcolor="#666666"];
+  LOC -> EST [color="#666666", fontcolor="#666666"];
+  STAB -> SENS [color="#666666", fontcolor="#666666"];
+  PD -> DEV_MOT [color="#666666", fontcolor="#666666"];
+  PD -> PM [color="#666666", fontcolor="#666666"];
+  DMGR -> DDRV [color="#666666", fontcolor="#666666", label="init"];
+  DDRV -> DAPI [color="#666666", fontcolor="#666666"];
+  DAPI -> LIB [color="#666666", fontcolor="#666666", label="SPI1 を直接操作"];
+  DMGR -> SLK [color="#666666", fontcolor="#666666", label="1-Wire"];
+  DMGR -> I2C1DRV [color="#666666", fontcolor="#666666", label="DeckCtrl"];
+  EST -> DDRV [dir=back, style="dashed,bold", color="#c05050", fontcolor="#c05050", label="estimatorEnqueue"];
+  STAB -> SYS [dir=back, style="dashed,bold", color="#c05050", fontcolor="#c05050", label="stabilizerInit"];
+  DMGR -> SYS [dir=back, style="dashed,bold", color="#c05050", fontcolor="#c05050", label="deckInit"];
+  LLC -> CRTP [dir=back, style="dashed,bold", color="#c05050", fontcolor="#c05050", label="port 3 / 7 CB"];
+  LOC -> CRTP [dir=back, style="dashed,bold", color="#c05050", fontcolor="#c05050", label="port 6 CB"];
+  CRTP -> LINK [color="#666666", fontcolor="#666666"];
+  PL -> WRK [color="#666666", fontcolor="#666666"];
+  PL -> STO [color="#666666", fontcolor="#666666"];
+  SENS -> DEV_IMU [color="#666666", fontcolor="#666666"];
+  EST -> SENS [dir=back, style="dashed,bold", color="#c05050", fontcolor="#c05050", label="estimatorEnqueue"];
+  LINK -> SLK [color="#666666", fontcolor="#666666"];
+  PM -> SLK [color="#666666", fontcolor="#666666"];
+  SLK -> UART [color="#666666", fontcolor="#666666"];
+  STO -> DEV_EEP [color="#666666", fontcolor="#666666"];
+  DEV_IMU -> I2C3DRV [color="#666666", fontcolor="#666666"];
+  DEV_EEP -> I2C1DRV [color="#666666", fontcolor="#666666"];
+  SENS -> EXTI [dir=back, style="dashed,bold", color="#c05050", fontcolor="#c05050", label="EXTI14_Callback"];
+  I2C3DRV -> LIB [color="#666666", fontcolor="#666666"];
+  I2C1DRV -> LIB [color="#666666", fontcolor="#666666"];
+  UART -> LIB [color="#666666", fontcolor="#666666"];
+  DEV_MOT -> LIB [color="#666666", fontcolor="#666666"];
+  EXTI -> LIB [color="#666666", fontcolor="#666666"];
+  WDG -> LIB [color="#666666", fontcolor="#666666"];
+  SYS -> WDG [color="#666666", fontcolor="#666666", label="watchdogInit"];
+  LINK -> LIB [color="#666666", fontcolor="#666666", label="USB スタック"];
+  WRK -> RTOS [color="#666666", fontcolor="#666666", label="全タスクが使用"];
+  SYS -> PLAT [color="#666666", fontcolor="#666666"];
+  LIB -> P_USART6 [color="#666666", fontcolor="#666666"];
+  LIB -> P_USB [color="#666666", fontcolor="#666666"];
+  LIB -> P_I2C1 [color="#666666", fontcolor="#666666"];
+  LIB -> P_SPI1 [color="#666666", fontcolor="#666666"];
+  LIB -> P_I2C3 [color="#666666", fontcolor="#666666"];
+  LIB -> P_EXTI [color="#666666", fontcolor="#666666"];
+  LIB -> P_TIM [color="#666666", fontcolor="#666666"];
+  P_USART6 -> X_NRF [dir=none, style=dotted, penwidth=1.4, color="#8a8a8a", fontcolor="#8a8a8a", label="UART"];
+  P_I2C1 -> X_EEP [dir=none, style=dotted, penwidth=1.4, color="#8a8a8a", fontcolor="#8a8a8a", label="I2C"];
+  P_I2C1 -> X_DECK [dir=none, style=dotted, penwidth=1.4, color="#8a8a8a", fontcolor="#8a8a8a", label="I2C"];
+  P_SPI1 -> X_DECK [dir=none, style=dotted, penwidth=1.4, color="#8a8a8a", fontcolor="#8a8a8a", label="SPI"];
+  P_I2C3 -> X_IMU [dir=none, style=dotted, penwidth=1.4, color="#8a8a8a", fontcolor="#8a8a8a", label="I2C"];
+  P_EXTI -> X_IMU [dir=none, style=dotted, penwidth=1.4, color="#8a8a8a", fontcolor="#8a8a8a", label="INT"];
+  P_TIM -> X_MOT [dir=none, style=dotted, penwidth=1.4, color="#8a8a8a", fontcolor="#8a8a8a", label="PWM"];
+  APP -> CMD -> DMGR -> SYS -> SENS -> DEV_IMU -> I2C3DRV -> PLAT -> P_USART6 -> X_NRF [style=invis, weight=10];
+}

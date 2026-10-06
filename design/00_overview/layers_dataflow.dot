@@ -1,0 +1,129 @@
+// データフロー（層の配置ではなく、データの流れの向きに配置）
+// 生成元: tools/gen_layer_diagrams.py（このファイルは直接編集しない）
+digraph dataflow {
+  graph [rankdir=LR, nodesep=0.3, ranksep=0.7, fontname="Yu Gothic UI", fontsize=12, splines=spline];
+  node [shape=box, style="rounded,filled", fontname="Yu Gothic UI", fontsize=10, height=0.4];
+  edge [fontname="Yu Gothic UI", fontsize=8, arrowsize=0.6, color="#2f6fb3", fontcolor="#2f6fb3"];
+  LOC [label="L5: 測位
+lighthouse / localization", fillcolor="#fdeef7", color="#d49ac0"];
+  SUP [label="L5: supervisor", fillcolor="#fdeef7", color="#d49ac0"];
+  EST [label="L5: 状態推定", fillcolor="#fdeef7", color="#d49ac0"];
+  LLC [label="L5: 低レベル commander", fillcolor="#fdeef7", color="#d49ac0"];
+  CMD [label="L5: commander
+(優先度管理)", fillcolor="#fdeef7", color="#d49ac0"];
+  CA [label="L5: 衝突回避", fillcolor="#fdeef7", color="#d49ac0"];
+  HLC [label="L5: high-level commander
++ planner", fillcolor="#fdeef7", color="#d49ac0"];
+  PD [label="L5: 出力分配", fillcolor="#fdeef7", color="#d49ac0"];
+  CTRL [label="L5: 制御", fillcolor="#fdeef7", color="#d49ac0"];
+  DAPI [label="L4: デッキ API
+GPIO / SPI / ADC", fillcolor="#eaf7f2", color="#8cc7ae"];
+  DDRV [label="L4: デッキドライバ
+Flow / Loco / LH ...", fillcolor="#eaf7f2", color="#8cc7ae"];
+  DMGR [label="L4: デッキ管理
+検出・照合", fillcolor="#eaf7f2", color="#8cc7ae"];
+  MEM [label="L3: mem", fillcolor="#fff4e6", color="#e0b27a"];
+  PEER [label="L3: 周辺機体の位置テーブル
+peer localization", fillcolor="#fff4e6", color="#e0b27a"];
+  PL [label="L3: param / log", fillcolor="#fff4e6", color="#e0b27a"];
+  CRTP [label="L3: CRTP ルータ
++ console", fillcolor="#fff4e6", color="#e0b27a"];
+  PM [label="L2: 電源管理", fillcolor="#e9f6fb", color="#86bfd6"];
+  SLK [label="L2: syslink", fillcolor="#e9f6fb", color="#86bfd6"];
+  STO [label="L2: ストレージ", fillcolor="#e9f6fb", color="#86bfd6"];
+  SENS [label="L2: センサ統合", fillcolor="#e9f6fb", color="#86bfd6"];
+  LINK [label="L2: CRTP リンク
+radiolink / usblink", fillcolor="#e9f6fb", color="#86bfd6"];
+  DEV_EEP [label="L1D: EEPROM ドライバ
+eeprom / configblock", fillcolor="#edf7e9", color="#99c98a"];
+  DEV_MOT [label="L1D: モータドライバ
+motors", fillcolor="#edf7e9", color="#99c98a"];
+  DEV_IMU [label="L1D: IMU ドライバ
+bmi088 / bmp3", fillcolor="#edf7e9", color="#99c98a"];
+  I2C1DRV [label="L1B: I2C1 ドライバ
+i2cdev / i2c_drv", fillcolor="#e3f1dc", color="#86b877"];
+  I2C3DRV [label="L1B: I2C3 ドライバ
+i2cdev / i2c_drv", fillcolor="#e3f1dc", color="#86b877"];
+  EXTI [label="L1B: exti
+割り込みの振り分け", fillcolor="#e3f1dc", color="#86b877"];
+  UART [label="L1B: uart_syslink
+(USART6)", fillcolor="#e3f1dc", color="#86b877"];
+  P_USART6 [label="HW: USART6 + DMA", fillcolor="#f2f2f2", color="#9a9a9a"];
+  P_I2C3 [label="HW: I2C3 + DMA", fillcolor="#f2f2f2", color="#9a9a9a"];
+  X_DECK [label="HW: デッキ", fillcolor="#f2f2f2", color="#9a9a9a"];
+  P_SPI1 [label="HW: SPI1 + DMA", fillcolor="#f2f2f2", color="#9a9a9a"];
+  P_USB [label="HW: USB OTG FS", fillcolor="#f2f2f2", color="#9a9a9a"];
+  X_MOT [label="HW: ブラシモータ ×4", fillcolor="#f2f2f2", color="#9a9a9a"];
+  X_IMU [label="HW: BMI088 / BMP388", fillcolor="#f2f2f2", color="#9a9a9a"];
+  P_I2C1 [label="HW: I2C1 + DMA", fillcolor="#f2f2f2", color="#9a9a9a"];
+  X_NRF [label="HW: nRF51", fillcolor="#f2f2f2", color="#9a9a9a"];
+  X_EEP [label="HW: EEPROM チップ
+24AA64F", fillcolor="#f2f2f2", color="#9a9a9a"];
+  P_EXTI [label="HW: EXTI", fillcolor="#f2f2f2", color="#9a9a9a"];
+  P_TIM [label="HW: TIM2 / TIM4
+PWM", fillcolor="#f2f2f2", color="#9a9a9a"];
+  X_IMU -> P_I2C3 [label="I2C 信号"];
+  P_I2C3 -> I2C3DRV [label="DMA 転送"];
+  I2C3DRV -> DEV_IMU [label="レジスタ値"];
+  DEV_IMU -> SENS [label="生データ"];
+  X_IMU -> P_EXTI [label="data ready (INT)"];
+  P_EXTI -> EXTI [label="割り込み"];
+  EXTI -> SENS [label="IMU 割り込み"];
+  SENS -> EST [label="gyro / acc / baro"];
+  SENS -> SUP [label="acc"];
+  SENS -> CTRL [label="gyro"];
+  DDRV -> EST [label="flow / 距離 / TDoA"];
+  LOC -> EST [label="位置 / 姿勢 / sweep"];
+  EST -> CMD [label="state"];
+  EST -> HLC [label="state"];
+  EST -> CA [label="state"];
+  EST -> CTRL [label="state"];
+  SUP -> EST [label="飛行中フラグ"];
+  CRTP -> LLC [label="port 3 / 7"];
+  CRTP -> HLC [label="port 8"];
+  LLC -> CMD [label="setpoint"];
+  HLC -> CMD [label="setpoint"];
+  CMD -> SUP [label="setpoint (監視)"];
+  CMD -> CA [label="setpoint"];
+  CA -> SUP [label="修正 setpoint"];
+  SUP -> CTRL [label="最終 setpoint"];
+  SUP -> LLC [label="受付停止"];
+  CRTP -> LOC [label="port 6"];
+  LOC -> PEER [label="他の機体の位置"];
+  PEER -> CA [label="他の機体の位置"];
+  CTRL -> PD [label="control"];
+  PM -> PD [label="電池電圧"];
+  PD -> DEV_MOT [label="PWM 比率"];
+  SUP -> DEV_MOT [label="停止"];
+  DEV_MOT -> P_TIM [label="比較レジスタ"];
+  P_TIM -> X_MOT [label="PWM 信号"];
+  X_DECK -> P_SPI1 [label="SPI 信号"];
+  P_SPI1 -> DAPI [label="DMA 転送"];
+  DAPI -> DDRV [label="デッキのデータ"];
+  X_NRF -> P_USART6 [label="UART 信号"];
+  P_USART6 -> UART [label="受信割り込み"];
+  UART -> SLK [label="syslink"];
+  P_USB -> LINK [label="CRTP (USB)"];
+  SLK -> LINK [label="CRTP"];
+  SLK -> PM [label="電池の状態"];
+  SLK -> DMGR [label="1-Wire"];
+  LINK -> CRTP [label="CRTP"];
+  CRTP -> PL [label="port 2 / 5"];
+  CRTP -> MEM [label="port 4"];
+  X_EEP -> P_I2C1 [label="I2C 信号"];
+  P_I2C1 -> I2C1DRV [label="DMA 転送"];
+  I2C1DRV -> DEV_EEP [label="バイト列"];
+  DEV_EEP -> STO [label="保存値"];
+  STO -> PL [label="永続 param"];
+  subgraph cluster_legend { label="層の色"; fontsize=10; color="#cccccc";
+    leg_L5 [label="L5 アプリケーション層", fillcolor="#fdeef7", color="#d49ac0", fontsize=9];
+    leg_L4 [label="L4 デッキ層", fillcolor="#eaf7f2", color="#8cc7ae", fontsize=9];
+    leg_L3 [label="L3 基盤サービス層", fillcolor="#fff4e6", color="#e0b27a", fontsize=9];
+    leg_L2 [label="L2 ハード抽象化層", fillcolor="#e9f6fb", color="#86bfd6", fontsize=9];
+    leg_L1D [label="L1 ドライバ層（デバイスドライバ）", fillcolor="#edf7e9", color="#99c98a", fontsize=9];
+    leg_L1B [label="L1 ドライバ層（バスドライバ）", fillcolor="#e3f1dc", color="#86b877", fontsize=9];
+    leg_L0 [label="L0 プラットフォーム・OS 層", fillcolor="#f1efff", color="#aaa1dd", fontsize=9];
+    leg_HW [label="HW ハードウェア", fillcolor="#f2f2f2", color="#9a9a9a", fontsize=9];
+    leg_L5 -> leg_L4 -> leg_L3 -> leg_L2 -> leg_L1D -> leg_L1B -> leg_L0 -> leg_HW [style=invis];
+  }
+}
